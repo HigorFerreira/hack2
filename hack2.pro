@@ -1,9 +1,9 @@
 QT -= gui
 
-CONFIG += c++11 console
+CONFIG += c++11 strict_c++ console
 CONFIG -= app_bundle
 
-QMAKE_CXXFLAGS += -fopenmp
+QMAKE_CXXFLAGS += -lcrypt
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings

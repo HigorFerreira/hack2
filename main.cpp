@@ -1,7 +1,12 @@
 #include<iostream>
-#include<omp.h>
+#include<unistd.h>
+#include<stdio.h>
+//#include<crypt.h>
 
 using namespace std;
+
+//Declaração do protótipo da função
+//char *crypt(const char *, const char *);
 
 bool filter(long *gen, int *chars){
     chars[0] = (*gen & (long)0xff);
@@ -21,29 +26,82 @@ bool filter(long *gen, int *chars){
     return true;
 }
 
+bool equals(char *hash, char *str){
+    char *encripted = crypt((const char *)str, "ab");
+    return false;
+}
+
+//ABSTRAÇÃO DE CÓDIGO PARA O PROCESSAMENTO EM PARALELO
 int main(){
-    #pragma omp parallel
-    {
-        int id = omp_get_thread_num();
-        int nt = omp_get_num_threads();
+    char *senha = crypt("ana123", "ab");
 
-        int *filterArea = new int[8];
-        //Starts with string ---> "     "
-        //long gen = 0x2020202020;
-        char *str = new char;
+    int *filterArea = new int[8];
+    char *str = new char;
 
-        #pragma omp for
-        for(long gen = 0x2020202020; gen < 0xffffffffff; gen++){
+//    goto fim;
 
-            if(filter(&gen, filterArea)){
-                for(int i = 4, j = 0; j < 5; i--, j++){
-                    str[j] = (gen>>8*i)&0xff;
-                }
+    //HACK PARA SENHAS DE 5 CARACTERES
+    /*
+     * Nó de processamento 1
+     * Para strings geradas com bits de alta ordem em 00
+     */
+    for(long gen = 0x2020202020; gen < 0x3fffffffff; gen++){
 
-                cout<<str<<endl;
+        if(filter(&gen, filterArea)){
+            for(int i = 4, j = 0; j < 5; i--, j++){
+                str[j] = (gen>>8*i)&0xff;
             }
 
-        //gen++;
+            equals(senha, str);
         }
     }
+
+    //goto fim;
+
+    /*
+     * Nó de processamento 2
+     * Para strings geradas com bits de alta ordem em 01
+     */
+    for(long gen = 0x4020202020; gen < 0x7fffffffff; gen++){
+
+        if(filter(&gen, filterArea)){
+            for(int i = 4, j = 0; j < 5; i--, j++){
+                str[j] = (gen>>8*i)&0xff;
+            }
+
+            equals(senha, str);
+        }
+    }
+
+    /*
+     * Nó de processamento 3
+     * Para strings geradas com bits de alta ordem em 10
+     */
+    for(long gen = 0x8020202020; gen < 0xbfffffffff; gen++){
+
+        if(filter(&gen, filterArea)){
+            for(int i = 4, j = 0; j < 5; i--, j++){
+                str[j] = (gen>>8*i)&0xff;
+            }
+
+            equals(senha, str);
+        }
+    }
+
+    /*
+     * Nó de processamento 4
+     * Para strings geradas com bits de alta ordem em 11
+     */
+    for(long gen = 0xc020202020; gen < 0xffffffffff; gen++){
+
+        if(filter(&gen, filterArea)){
+            for(int i = 4, j = 0; j < 5; i--, j++){
+                str[j] = (gen>>8*i)&0xff;
+            }
+
+            equals(senha, str);
+        }
+    }
+
+    fim:;
 }
