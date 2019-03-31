@@ -1,4 +1,5 @@
 #include<iostream>
+#include<omp.h>
 
 using namespace std;
 
@@ -21,21 +22,28 @@ bool filter(long *gen, int *chars){
 }
 
 int main(){
+    #pragma omp parallel
+    {
+        int id = omp_get_thread_num();
+        int nt = omp_get_num_threads();
 
-    int *filterArea = new int[8];
-    long gen = 0x2020202020;
-    char *str = new char;
+        int *filterArea = new int[8];
+        //Starts with string ---> "     "
+        //long gen = 0x2020202020;
+        char *str = new char;
 
-    while(((gen>>8*4) & 0xc0) == 0){
+        #pragma omp for
+        for(long gen = 0x2020202020; gen < 0xffffffffff; gen++){
 
-        if(filter(&gen, filterArea)){
-            for(int i = 4, j = 0; j < 5; i--, j++){
-                str[j] = (gen>>8*i)&0xff;
+            if(filter(&gen, filterArea)){
+                for(int i = 4, j = 0; j < 5; i--, j++){
+                    str[j] = (gen>>8*i)&0xff;
+                }
+
+                cout<<str<<endl;
             }
 
-            cout<<str<<endl;
+        //gen++;
         }
-
-        gen++;
     }
 }
