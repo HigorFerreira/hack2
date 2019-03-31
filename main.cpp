@@ -28,7 +28,7 @@ bool filter(long *gen, int *chars){
 
 bool equals(char *hash, char *str){
     char *encripted = crypt((const char *)str, "ab");
-    return false;
+    return (*hash == *encripted);
 }
 
 //ABSTRAÇÃO DE CÓDIGO PARA O PROCESSAMENTO EM PARALELO
@@ -52,7 +52,9 @@ int main(){
                 str[j] = (gen>>8*i)&0xff;
             }
 
-            equals(senha, str);
+            if(equals(senha, str)){
+                break;
+            }
         }
     }
 
@@ -69,7 +71,9 @@ int main(){
                 str[j] = (gen>>8*i)&0xff;
             }
 
-            equals(senha, str);
+            if(equals(senha, str)){
+                break;
+            }
         }
     }
 
@@ -84,7 +88,9 @@ int main(){
                 str[j] = (gen>>8*i)&0xff;
             }
 
-            equals(senha, str);
+            if(equals(senha, str)){
+                break;
+            }
         }
     }
 
@@ -99,7 +105,9 @@ int main(){
                 str[j] = (gen>>8*i)&0xff;
             }
 
-            equals(senha, str);
+            if(equals(senha, str)){
+                break;
+            }
         }
     }
 
