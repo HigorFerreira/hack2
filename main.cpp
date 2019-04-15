@@ -1,6 +1,7 @@
 #include<iostream>
 #include<unistd.h>
 #include<stdio.h>
+#include <mpi.h>
 //#include<crypt.h>
 
 using namespace std;
@@ -38,7 +39,18 @@ int main(){
     int *filterArea = new int[8];
     char *str = new char;
 
-//    goto fim;
+    char *a = "ana124";
+
+    cout<<senha<<endl;
+    cout<<a<<endl;
+    cout<<equals(senha, a)<<endl;
+
+    int size,rank;
+
+    MPI_Init();
+
+    MPI_Comm_rank(MPI_COMM_WORLD,&rank);
+	MPI_Comm_size(MPI_COMM_WORLD,&size);
 
     //HACK PARA SENHAS DE 5 CARACTERES
     /*
@@ -52,9 +64,9 @@ int main(){
                 str[j] = (gen>>8*i)&0xff;
             }
 
-            if(equals(senha, str)){
-                break;
-            }
+            // if(equals(senha, str)){
+            //     break;
+            // }
         }
     }
 
@@ -71,9 +83,9 @@ int main(){
                 str[j] = (gen>>8*i)&0xff;
             }
 
-            if(equals(senha, str)){
-                break;
-            }
+            // if(equals(senha, str)){
+            //     break;
+            // }
         }
     }
 
@@ -88,9 +100,9 @@ int main(){
                 str[j] = (gen>>8*i)&0xff;
             }
 
-            if(equals(senha, str)){
-                break;
-            }
+            // if(equals(senha, str)){
+            //     break;
+            // }
         }
     }
 
@@ -105,11 +117,11 @@ int main(){
                 str[j] = (gen>>8*i)&0xff;
             }
 
-            if(equals(senha, str)){
-                break;
-            }
+            // if(equals(senha, str)){
+            //     break;
+            // }
         }
     }
 
-    fim:;
+    MPI_Finalize(); 
 }
