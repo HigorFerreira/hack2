@@ -7,6 +7,7 @@ using namespace std;
 
 #define RANGE_START 0x20
 #define RANGE_ENDDD 0X7E
+#define DISPERCION "ab"
 
 //Declaração do protótipo da função
 // char *crypt(const char *, const char *);
@@ -29,7 +30,7 @@ string pass5(int start, int end, string &compare){
 
                         cout<<kicker<<endl;
 
-                        cryptKick = crypt(kicker.c_str(), "ab");
+                        cryptKick = crypt(kicker.c_str(), DISPERCION);
                         
                         if(cryptKick == compare) return kicker;
 
@@ -44,12 +45,15 @@ string pass5(int start, int end, string &compare){
 
 //ABSTRAÇÃO DE CÓDIGO PARA O PROCESSAMENTO EM PARALELO
 int main(){
-    string pass = crypt("  Gac", "ab");
+    string pass = crypt("  ana", DISPERCION);
     // string pass = "ANA";
     
     int size,rank;
 
-    cout<<endl<<"Senha: "<<pass5(0x20, 0x21, pass)<<endl;
+    string adv = pass5(0x20, 0x21, pass);
+
+    cout<<endl;
+    cout<<"Senha: "<<adv<<endl;
 
     // MPI_Init();
 
