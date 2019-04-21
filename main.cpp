@@ -1,7 +1,7 @@
 #include<iostream>
 #include<unistd.h>
 #include<stdio.h>
-// #include <mpi.h>
+#include <mpi.h>
 
 using namespace std;
 
@@ -12,7 +12,7 @@ using namespace std;
 //Declaração do protótipo da função
 // char *crypt(const char *, const char *);
 
-string pass5(int start8, int start7, int start6, int start, string &compare){
+string pass(int start8, int start7, int start6, int start, string &compare){
 
     string shot = "";
     string shot6 = "";
@@ -78,24 +78,96 @@ string pass5(int start8, int start7, int start6, int start, string &compare){
     }
 }
 
+string passAll(int start, string &compare){
+    return pass(pass, pass, pass, pass, compare);
+}
+
+int PA(int n, int r, int a1){
+    return a1 + (n-1)*r;
+}
+
+int PA(int n, int r){
+    return PA(n, r, 32);
+}
+
+int PA(int n){
+    return PA(n, 10, 32);
+}
+
+
 //ABSTRAÇÃO DE CÓDIGO PARA O PROCESSAMENTO EM PARALELO
 int main(){
     string pass = crypt("     ana", DISPERTION);
-    // string pass = "ANA";
+    string hacked;
     
     int size,rank;
 
-    string adv = pass5(0x20, 0x20, 0x20, 0x20, pass);
+    MPI_Init();
 
-    cout<<endl;
-    cout<<"Senha: "<<adv<<endl;
+    MPI_Comm_rank(MPI_COMM_WORLD,&rank);
+	MPI_Comm_size(MPI_COMM_WORLD,&size);
 
-    // MPI_Init();
+    switch(rank){
+        case 0:
+            break;
 
-    // MPI_Comm_rank(MPI_COMM_WORLD,&rank);
-	// MPI_Comm_size(MPI_COMM_WORLD,&size);
+        case 1:
+            hacked = passAll(PA(rank), pass);   // Será de 10 em 10, começa em 32
+            break;
+        case 2:
+            hacked = passAll(PA(rank), pass);   // Será de 10 em 10, começa em 42
+            break;
+        case 3:
+            hacked = passAll(PA(rank), pass);   // Será de 10 em 10, ...
+            break;
+        case 4:
+            hacked = passAll(PA(rank), pass);   // Será de 10 em 10
+            break;
+        case 5:
+            hacked = passAll(PA(rank), pass);   // Será de 10 em 10
+            break;
+        case 6:
+            hacked = passAll(PA(rank), pass);   // Será de 10 em 10
+            break;
+        case 7:
+            hacked = passAll(PA(rank), pass);   // Será de 10 em 10
+            break;
+        case 8:
+            hacked = passAll(PA(rank), pass);   // Será de 10 em 10
+            break;
+        case 9:
+            hacked = passAll(PA(rank), pass);   // Será de 10 em 10
+            break;
+        case 10:
+            hacked = passAll(PA(rank), pass);   // Será de 10 em 10
+            break;
+    }
 
+    if(rank == 0){
+        cout<<"Waiting for password!"<<endl;
+        while(true){
+            void *message;
+            for (i=1;i<size;i++) {
+                MPI_Recv(message,8,MPI_CHAR,i,999,MPI_COMM_WORLD,&status);
+                printf("A senha e: %s\n\n", message);
+                goto fim;
+            }
+        }        
+    }
+
+    //Send password to rank 0
+    char buffer[8];
+    for(int i = 0; i < 8; i++){
+        buffer[i] = 0;
+    }
+    for(int i = 0; i < hacked.length(); i++){
+        buffer[i] = hacked[i];
+    }
+    const char *bufferPt = buffer;
     
+    MPI_Send((const void *)bufferPt, 8, MPI_CHAR, 0, 999, MPI_COMM_WORLD);
 
-    // MPI_Finalize(); 
+    fim:;    
+
+    MPI_Finalize(); 
 }
