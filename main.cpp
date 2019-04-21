@@ -13,6 +13,8 @@ using namespace std;
 // char *crypt(const char *, const char *);
 
 string pass(int start8, int start7, int start6, int start, string &compare){
+    //Gambiarra
+    int _end = start + 10;
 
     string shot = "";
     string shot6 = "";
@@ -24,11 +26,11 @@ string pass(int start8, int start7, int start6, int start, string &compare){
     string cryptShot7 = "";
     string cryptShot8 = "";
 
-    for(int c = start8; c < RANGE_ENDDD; c++){
-        for(int b = start7; b < RANGE_ENDDD; b++){
-            for(int a = start6; a < RANGE_ENDDD; a++){
+    for(int c = start8; c < _end; c++){
+        for(int b = start7; b < _end; b++){
+            for(int a = start6; a < _end; a++){
 
-                for(int i = start; i < RANGE_ENDDD; i++){
+                for(int i = start; i < _end; i++){
                     for(int j = RANGE_START; j < RANGE_ENDDD; j++){
                         for(int k = RANGE_START; k < RANGE_ENDDD; k++){
                             for(int l = RANGE_START; l < RANGE_ENDDD; l++){
